@@ -18,6 +18,26 @@ exports.read = (req, res) => {
     });
 };
 
+exports.readLimit = (req, res) => {
+
+    model.ContaPR.findAndCountAll({
+        include: [
+            { model: model.Banco }
+        ],
+        limit: 12,
+        offset: 12
+    }).then((data) => {
+
+        res.send(data);
+
+    }).catch((error) => {
+        console.log(error);
+        res.send(error);
+    });
+};
+
+
+
 exports.insert = (req, res) => {
 
     const dados = req.body;
