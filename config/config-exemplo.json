@@ -1,6 +1,9 @@
 {
     "development": {
         "dialect": "mariadb",
+        "dialectOptions": {
+            "timezone": "Etc/GMT-3"
+        },
         "port": 3306, 
         "host": "endereço do banco",
         "database": "nome do banco",

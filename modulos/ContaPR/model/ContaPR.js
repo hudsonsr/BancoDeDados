@@ -125,13 +125,11 @@ module.exports = (sequelize, DataTypes) => {
         freezeTableName: true,
         schema: '',
         tableName: 'ContaPR',
-        timestamps: false,
-        classMethods: {
-            associate: (model) => {
-                ContaPRs.belongsTo(model.Banco, { foreignKey: 'CprFormaPag' });
-            }
-        }
-    });
-
+        timestamps: false
+    })
+    ContaPRs.associate = function(model) {
+        ContaPRs.belongsTo(model.Banco, { foreignKey: 'CprFormaPag' })
+    };
+    
     return ContaPRs;
 };
