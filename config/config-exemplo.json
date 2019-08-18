@@ -1,0 +1,11 @@
+{
+    "development": {
+        "dialect": "mariadb",
+        "port": 3306, 
+        "host": "endereço do banco",
+        "database": "nome do banco",
+        "username": "usuario",
+        "password": "senha",
+        "logging": false
+    }
+}
