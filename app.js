@@ -8,8 +8,13 @@ const bodyParser = require('body-parser');
 const cliente = require('./modulos/Cliente/Cliente');
 //const { cliente } = require('./App/models');
 
-
 const app = express();
+app.use((req, res, next) =>{
+  console.log(req);
+  req.io = io;
+  console.log(res);
+  return next();
+});
 app.use(cors());
 
 app.use(bodyParser.json());

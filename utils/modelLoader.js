@@ -10,6 +10,7 @@ let db = {};
 const models = [
     '../modulos/Banco/model/Banco',
     '../modulos/ContaPR/model/ContaPR',
+    '../App/models/Cliente',
 ];
 
 let l = models.length;

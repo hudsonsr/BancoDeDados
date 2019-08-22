@@ -35,17 +35,23 @@ exports.insert = (req, res) => {
         });
 };
 
-exports.manyInserts = (req, res) =>{
-    
+exports.manyInserts = async (req, res) =>{
+   
+    const box = 'connectionRoom';
     const dados = req.body;
+    await cliente.bulkCreate(dados);
     
-    cliente
-        .bulkCreate(
-            dados
-        ).then(() => {             
-            console.log('Finalizou');
-            res.send(true);
-        });
+    try{
+        req.io.sockets.in(box).emit('Api', 'cadastrou novos clientes');
+     
+    } catch(err){
+        console.log(err + ' - ' );
+    }
+   
+    console.log('Finalizou');
+    res.send(true);
+ 
+    
 }
 
 exports.update = (req, res) => {
