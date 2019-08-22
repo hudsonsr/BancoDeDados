@@ -1,13 +1,13 @@
 'use strict'
 
-const model = require('../../../utils/modelLoader');
+//const model = require('../../../utils/modelLoader');
+
+const { cliente } = require('../../../App/models');
 
 exports.read = (req, res) => {
 
-    model.ContaPR.findAll({
-        include: [
-            { model: model.Banco }
-        ]
+    cliente.findAll({
+
     }).then((data) => {
 
         res.send(data);
@@ -17,32 +17,12 @@ exports.read = (req, res) => {
         res.send(error);
     });
 };
-
-exports.readLimit = (req, res) => {
-
-    model.ContaPR.findAndCountAll({
-        include: [
-            { model: model.Banco }
-        ],
-        limit: 12,
-        offset: 12
-    }).then((data) => {
-
-        res.send(data);
-
-    }).catch((error) => {
-        console.log(error);
-        res.send(error);
-    });
-};
-
-
 
 exports.insert = (req, res) => {
 
     const dados = req.body;
 
-    model.ContaPR
+    cliente
         .build(
             dados
         )
@@ -55,14 +35,27 @@ exports.insert = (req, res) => {
         });
 };
 
+exports.manyInserts = (req, res) =>{
+    
+    const dados = req.body;
+    
+    cliente
+        .bulkCreate(
+            dados
+        ).then(() => {             
+            console.log('Finalizou');
+            res.send(true);
+        });
+}
+
 exports.update = (req, res) => {
 
     const dados = req.body;
 
-    model.ContaPR
+    cliente
         .update(dados, {
             where: {
-                CprCodigo: req.query.CprCodigo
+                ID: req.query.ID
             }
         })
         .then((data) => {
@@ -77,10 +70,10 @@ exports.delete = (req, res) => {
 
     const dados = req.body;
 
-    model.ContaPR
+    Cliente
         .destroy({
             where: {
-                CprCodigo: dados.CprCodigo
+                ID: dados.params.ID
             }
         })
         .then((rowDeleted) => {

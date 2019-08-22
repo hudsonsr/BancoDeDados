@@ -1,4 +1,7 @@
 'use strict'
+const { isNumeric } = require('validator');
+
+
 
 module.exports = (sequelize, DataTypes) => {
 
@@ -13,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             field: 'CprCodOrigem',
             defaultValue: 1,
-            allowNull: false 
+            allowNull: false
         },
         CprCatCodigo: {
             type: DataTypes.INTEGER,
@@ -54,7 +57,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             field: 'CprPago',
             defaultValue: 0,
-            allowNull: false 
+            allowNull: false
+
         },
         CprExcluida: {
             type: DataTypes.BOOLEAN,
@@ -125,7 +129,7 @@ module.exports = (sequelize, DataTypes) => {
         freezeTableName: true,
         schema: '',
         tableName: 'ContaPR',
-        timestamps: false
+        timestamps: true
     })
     ContaPRs.associate = function(model) {
         ContaPRs.belongsTo(model.Banco, { foreignKey: 'CprFormaPag' })

@@ -7,7 +7,7 @@ const loader = require('../utils/modelLoader');
 
 // Obter porta do meio ambiente e armazenamento no Express.
 
-const port = normalizePort('3000');
+const port = normalizePort('3333');
 app.set('port', port);
 
 // Criar servidor HTTP.
