@@ -36,8 +36,6 @@ app.set('port', port);
 // Criar servidor HTTP.
  
 
-
-
 io.on("connection", socket => {
     console.log("1")
     socket.on('Api', box =>{
@@ -45,6 +43,7 @@ io.on("connection", socket => {
         console.log(`2- ${box}`);
     })
 });
+
 app.use((req, res, next) =>{
     //console.log(req);
     req.io = io;

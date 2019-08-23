@@ -37,7 +37,7 @@ exports.insert = (req, res) => {
 
 exports.manyInserts = async (req, res) =>{
    
-    const box = 'connectionRoom';
+    const sala = 'connectionRoom';
     const dados = req.body;
     await cliente.bulkCreate(dados);
     
@@ -52,6 +52,17 @@ exports.manyInserts = async (req, res) =>{
     res.send(true);
  
     
+}
+
+exports.chat = (req, res) => {
+    const { para , mensagem } = req.body;
+    try{
+        req.io.sockets.in(para).emit('Api', mensagem);
+        res.send(para);
+    } catch(err){
+        console.log(err + ' - ' );
+        res.send('error');
+    }
 }
 
 exports.update = (req, res) => {
