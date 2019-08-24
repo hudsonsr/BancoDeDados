@@ -1,20 +1,57 @@
 'use strict'
 
-const app = require('../app');
+
 const http = require('http');
-const loader = require('../utils/modelLoader');
+const loader = require('./utils/modelLoader');
+const express = require('express');
+var cors = require('cors');
+const path = require('path');
+const bodyParser = require('body-parser');
+
+const cliente = require('./modulos/Cliente/Cliente');
+//const { cliente } = require('./App/models');
+
+const app = express();
+const server = http.createServer(app);
+const io = require('socket.io')(server);
+app.use(cors());
+
+app.use((req, res, next) =>{
+  //console.log(req);
+  req.io = io;
+  //console.log(res);
+  return next();
+});
 
 
-// Obter porta do meio ambiente e armazenamento no Express.
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+cliente.init(app);
+
 
 const port = normalizePort('3333');
 app.set('port', port);
 
 // Criar servidor HTTP.
+ 
 
-let server = http.createServer(app);
 
-const io = require('socket.io')(server);
+
+io.on("connection", socket => {
+    console.log("1")
+    socket.on('Api', box =>{
+        socket.join(box);
+        console.log(`2- ${box}`);
+    })
+});
+app.use((req, res, next) =>{
+    //console.log(req);
+    req.io = io;
+    //console.log(res);
+    return next();
+});
+
 
 // Escutar na porta todas as interfaces de rede.
 
