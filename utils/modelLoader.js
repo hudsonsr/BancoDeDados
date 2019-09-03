@@ -11,6 +11,7 @@ const models = [
     '../modulos/Banco/model/Banco',
     '../modulos/ContaPR/model/ContaPR',
     '../App/models/Cliente',
+    '../App/models/pdf',
 ];
 
 let l = models.length;

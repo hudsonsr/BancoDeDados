@@ -9,6 +9,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 
 const cliente = require('./modulos/Cliente/Cliente');
+const pdf = require('./modulos/pdf/pdf');
 //const { cliente } = require('./App/models');
 
 const app = express();
@@ -23,15 +24,22 @@ app.use((req, res, next) =>{
   return next();
 });
 
-
+/*
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+*/
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
+
 cliente.init(app);
+pdf.init(app);
 
 
 const port = normalizePort('3333');
 app.set('port', port);
+
+
 
 // Criar servidor HTTP.
  
