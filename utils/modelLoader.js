@@ -12,6 +12,7 @@ const models = [
     '../modulos/ContaPR/model/ContaPR',
     '../App/models/Cliente',
     '../App/models/pdf',
+    '../App/models/box',
 ];
 
 let l = models.length;

@@ -1,6 +1,5 @@
 'use strict'
 
-
 const http = require('http');
 const loader = require('./utils/modelLoader');
 const express = require('express');
@@ -10,19 +9,20 @@ const bodyParser = require('body-parser');
 
 const cliente = require('./modulos/Cliente/Cliente');
 const pdf = require('./modulos/pdf/pdf');
+const Usuario = require('./modulos/Usuario/Usuario');
+const Chave = require('./modulos/Chave/Chave');
+const Chave_Usuario = require('./modulos/Chave_Usuario/Chave_Usuario');
+const Box = require('./modulos/Box/Box');
+
+const {  Box: BoxController } = require('./App/models');
 //const { cliente } = require('./App/models');
 
 const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server);
-app.use(cors());
 
-app.use((req, res, next) =>{
-  //console.log(req);
-  req.io = io;
-  //console.log(res);
-  return next();
-});
+
+app.use(cors());
 
 /*
 app.use(bodyParser.json());
@@ -32,33 +32,58 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 
-cliente.init(app);
-pdf.init(app);
 
 
 const port = normalizePort('3333');
 app.set('port', port);
 
 
-
+const usuariosConectados = {};
 // Criar servidor HTTP.
- 
-
 io.on("connection", socket => {
-    console.log("1")
+    console.log(`Usuario conectado: ${socket.id}`);
+    
+    
+    
+    const { usuCodigo } = socket.handshake.query;
+    usuariosConectados[usuCodigo] = socket.id;
+    
+    BoxController
+        .findAll( { where: { BoxUsuCodigo: usuCodigo } } )
+        .then((data) => {
+            socket.emit('Mensagem', data );
+        }).catch((error) => {
+            console.log(error);
+        });
+
     socket.on('Api', box =>{
         socket.join(box);
-        console.log(`2- ${box}`);
+        console.log(`2- ${box} - id: ${socket.id} - ${new Date()}`);
+    })
+    socket.on('disconnect', box =>{
+        console.log(`3- ${box} - id: ${socket.id} - ${new Date()}`);
+        const { usuCodigo } = socket.handshake.query;
+        delete usuariosConectados[usuCodigo];
+        console.log(usuariosConectados);
     })
 });
 
+//midleware para disponibilizar o socket para toda aplicação
 app.use((req, res, next) =>{
     //console.log(req);
     req.io = io;
-    //console.log(res);
+    req.usuariosConectados = usuariosConectados;
+    console.log(`usuarios conectados: ${req.usuariosConectados}`);
     return next();
 });
 
+
+cliente.init(app);
+pdf.init(app);
+Usuario.init(app);
+Chave.init(app);
+Chave_Usuario.init(app);
+Box.init(app);
 
 // Escutar na porta todas as interfaces de rede.
 
