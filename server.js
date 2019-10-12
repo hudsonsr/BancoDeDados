@@ -43,7 +43,7 @@ const usuariosConectados = {};
 io.on("connection", socket => {
     console.log(`Usuario conectado: ${socket.id}`);
     
-    
+    console.dir(socket);
     
     const { usuCodigo } = socket.handshake.query;
     usuariosConectados[usuCodigo] = socket.id;

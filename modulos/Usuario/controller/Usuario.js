@@ -5,9 +5,10 @@
 const { Usuario } = require('../../../App/models');
 
 exports.read = (req, res) => {
+    const { UsuAtivo } = req.query;
 
     Usuario.findAll({
-
+        where: { UsuAtivo }
     }).then((data) => {
 
         res.send(data);

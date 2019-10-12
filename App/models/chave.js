@@ -14,7 +14,11 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     CveDescricao: DataTypes.STRING,
-    CveAtivo: DataTypes.BIGINT
+    CveAtivo: DataTypes.BIGINT,
+    CveAlocada: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: 0,
+    }
   }, { 
     freezeTableName: true,
     schema: '',

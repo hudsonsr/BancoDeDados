@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
         len: [6]
       }
     },
-    UsuNome: DataTypes.STRING
+    UsuNome: DataTypes.STRING,
+    UsuAtivo: DataTypes.BOOLEAN,
   }, { 
     freezeTableName: true,
     schema: '',
