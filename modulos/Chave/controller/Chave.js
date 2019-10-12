@@ -2,11 +2,11 @@
 
 //const model = require('../../../utils/modelLoader');
 
-const { cliente } = require('../../../App/models');
+const { Chaves } = require('../../../App/models');
 
 exports.read = (req, res) => {
 
-    cliente.findAll({
+    Chaves.findAll({
 
     }).then((data) => {
 
@@ -14,24 +14,53 @@ exports.read = (req, res) => {
 
     }).catch((error) => {
         console.log(error);
-        res.send(error);
+        res.status(400).send(error);
     });
+};
+
+exports.readOne = (req, res) => {
+    const where = req.query.numero;
+    console.dir({ where: {CveNumero: where} });
+    Chaves
+        .findAll( { where: {CveNumero: where} } )
+        .then((data) => {
+            res.send(data);
+        }).catch((error) => {
+            console.log(error);
+            res.status(400).send(error);
+        });
 };
 
 exports.insert = (req, res) => {
 
     const dados = req.body;
 
-    cliente
+    Chaves
         .build(
             dados
         )
         .save()
         .then((data) => {
-            res.send(true);
+            res.send(data);
         }).catch((error) => {
             console.log(error);
-            res.send(false);
+            res.status(400).send( {error: error} );
+        });
+};
+
+
+exports.inserir = (dados) => {
+    
+    Chaves
+        .create(
+            dados
+        )
+        .then((data) => {
+            console.log(data);
+            res.send(data);
+        }).catch((error) => {
+            console.log(error);
+            res.status(400).send( {error: err} );
         });
 };
 
@@ -39,10 +68,10 @@ exports.manyInserts = async (req, res) =>{
    
     const sala = 'connectionRoom';
     const dados = req.body;
-    await cliente.bulkCreate(dados);
+    await Chaves.bulkCreate(dados);
     
     try{
-        req.io.sockets.in(box).emit('Api', 'cadastrou novos clientes');
+        req.io.sockets.in(box).emit('Api', 'cadastrou novas Chaves');
      
     } catch(err){
         console.log(err + ' - ' );
@@ -54,22 +83,12 @@ exports.manyInserts = async (req, res) =>{
     
 }
 
-exports.chat = (req, res) => {
-    const { para , mensagem } = req.body;
-    try{
-        req.io.sockets.in(para).emit('Api', mensagem);
-        res.send(para);
-    } catch(err){
-        console.log(err + ' - ' );
-        res.send('error');
-    }
-}
 
 exports.update = (req, res) => {
 
     const dados = req.body;
 
-    cliente
+    Chaves
         .update(dados, {
             where: {
                 ID: req.query.ID
@@ -87,7 +106,7 @@ exports.delete = (req, res) => {
 
     const dados = req.body;
 
-    Cliente
+    Chaves
         .destroy({
             where: {
                 ID: dados.params.ID
@@ -97,6 +116,6 @@ exports.delete = (req, res) => {
             res.send(true);
         }, (err) => {
             console.log(err);
-            res.send(false);
+            res.status(400).send( {error: err} );
         });
 };
